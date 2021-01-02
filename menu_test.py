@@ -1,10 +1,11 @@
 import pygame
 from test import load_image
+from settings import *
 
 
 pygame.init()
 clock = pygame.time.Clock()
-size = width, height = 1280, 720
+size = WIDTH, HEIGHT
 screen = pygame.display.set_mode(size)
 
 def set_game_stage(stage):
@@ -81,4 +82,4 @@ while True:
             
         target_sprite_group.update(event)
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(FPS)

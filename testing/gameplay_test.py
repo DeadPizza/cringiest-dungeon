@@ -20,8 +20,11 @@ class Map(pygame.sprite.Sprite):
                 self.moving = False
 
         if self.moving:
-            self.dx -= 3
-            was = True
+            self.dx -= 3 * (1 - 2 * (pygame.mouse.get_pos()[0] < 640))
+            if self.dx > 0:
+                self.dx = 0
+            elif self.dx < -1650:
+                self.dx = -1650
 
         self.screen.blit(self.img, (self.dx, 0))
 

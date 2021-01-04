@@ -16,16 +16,14 @@ def set_game_stage(stage):
         MainMenuPicture(target_sprite_group, screen)
         StartGame(target_sprite_group, screen)
         Cursor(target_sprite_group, screen)
-    elif stage == 'test':
-        Shit(target_sprite_group, screen)
-        Cursor(target_sprite_group, screen)
     elif stage == 'battle':
-        Map(target_sprite_group, screen)
-        Hero(target_sprite_group, 1, screen)
-        Hero(target_sprite_group, 2, screen)
-        Hero(target_sprite_group, 3, screen)
-        Hero(target_sprite_group, 4, screen)
+        mp = Map(target_sprite_group, screen)
         Inventory(target_sprite_group, screen)
+        h1 = Hero(target_sprite_group, 1, screen)
+        h2 = Hero(target_sprite_group, 2, screen)
+        h3 = Hero(target_sprite_group, 3, screen)
+        h4 = Hero(target_sprite_group, 4, screen)
+        mp.set_heroes((h1, h2, h3, h4))
         Cursor(target_sprite_group, screen)
 
 class Cursor(pygame.sprite.Sprite):
@@ -46,9 +44,9 @@ class MainMenuPicture(pygame.sprite.Sprite):
     def __init__(self, group, screen):
         super().__init__(group)
         self.screen = screen
-        self.music = pygame.mixer.Sound('resources/audio/mm_music.mp3')
+        pygame.mixer.music.load('resources/audio/mm_music.mp3')
         self.img = load_image('bg_main_menu.png')
-        self.music.play()
+        pygame.mixer.music.play(-1)
 
     def update(self, *event):
         self.screen.blit(self.img, (0, 0))
@@ -69,21 +67,14 @@ class StartGame(pygame.sprite.Sprite):
         if self.rect.collidepoint(pygame.mouse.get_pos()):
             self.image = self.img_hovered
             if event and event[0].type == pygame.MOUSEBUTTONDOWN:
+                pygame.mixer.music.stop()
+                pygame.mixer.music.load('resources/audio/dungeon_music.mp3')
+                pygame.mixer.music.play(-1)
                 set_game_stage('battle')
         else:
             self.image = self.img_idle
 
         self.screen.blit(self.image, self.rect)
-
-
-class Shit(pygame.sprite.Sprite):
-    def __init__(self, group, screen):
-        super().__init__(group)
-        self.screen = screen
-        self.img = load_image('lulza.jpg')
-
-    def update(self, *event):
-        self.screen.blit(self.img, (0, 0))
 
 target_sprite_group = pygame.sprite.Group()
 set_game_stage('menu')
@@ -103,6 +94,6 @@ while True:
         target_sprite_group.update(event)
     if not events:
         target_sprite_group.update()
-    screen.blit(update_fps(), (10,0))
+    screen.blit(update_fps(), (5, 5))
     pygame.display.flip()
     clock.tick(FPS)

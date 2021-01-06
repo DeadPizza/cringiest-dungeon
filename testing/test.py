@@ -5,7 +5,7 @@ import random
 
 
 def load_image(name, colorkey=None):
-        fullname = os.path.join('resources/photo', name)
+        fullname = os.path.join('resources/images', name)
         if not os.path.isfile(fullname):
             print(f"file '{fullname}' not found")
             sys.exit()

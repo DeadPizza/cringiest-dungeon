@@ -45,7 +45,7 @@ class MainMenuPicture(pygame.sprite.Sprite):
         super().__init__(group)
         self.screen = screen
         pygame.mixer.music.load('resources/audio/mm_music.mp3')
-        self.img = load_image('bg_main_menu.png')
+        self.img = load_image('backs/bg_main_menu.png')
         pygame.mixer.music.play(-1)
 
     def update(self, *event):

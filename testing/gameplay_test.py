@@ -8,7 +8,7 @@ class Map(pygame.sprite.Sprite):
     def __init__(self, group, screen):
         super().__init__(group)
         self.screen = screen
-        self.img = load_image('testmap.png')
+        self.img = load_image('backs/testmap.png')
         self.rect = self.img.get_rect()
         self.dx = 0
         self.moving = False
@@ -22,7 +22,7 @@ class Map(pygame.sprite.Sprite):
         #for event in events:
         flag = True
         for hero in self.heroes:
-            if hero.rect.collidepoint(pygame.mouse.get_pos()): flag = False
+            if hero.rect.collidepoint(mpos): flag = False
         if event:
             if flag and event[0].type == pygame.MOUSEBUTTONDOWN:
                 self.moving = True
@@ -43,7 +43,7 @@ class Inventory(pygame.sprite.Sprite):
     def __init__(self, group, screen):
         super().__init__(group)
         self.screen = screen
-        self.img = load_image('inventory_test.png')
+        self.img = load_image('backs/inventory_test.png')
         
     def update(self, *event):
         self.screen.blit(self.img, (0, 420))

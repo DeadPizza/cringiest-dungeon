@@ -1,0 +1,22 @@
+[
+    {
+        "name": "RED_SQUARE",
+        "type": "default",
+        "texture": "hero.png"
+    },
+    {
+        "name": "RED_SQUARE",
+        "type": "default",
+        "texture": "hero.png"
+    },
+    {
+        "name": "RED_SQUARE",
+        "type": "default",
+        "texture": "hero.png"
+    },
+    {
+        "name": "RED_SQUARE",
+        "type": "default",
+        "texture": "hero.png"
+    }
+]

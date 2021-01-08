@@ -76,6 +76,39 @@ class Hero(pygame.sprite.Sprite):
             self.screen.blit(textsurface, (106, 566))
             self.screen.blit(self.img_2, (self.x, 150))
 
+
+class BattleGroup(pygame.sprite.Group):
+    def __init__(self, screen):
+        super().__init__()
+        self.screen = screen
+
+        self.map = Map(self, self.screen)
+        self.inv = Inventory(self, self.screen)
+        self.h1 = Hero(self, 1, screen)
+        self.h1.HP = 10
+        self.h2 = Hero(self, 2, screen)
+        self.h2.HP = 11
+        self.h3 = Hero(self, 3, screen)
+        self.h3.HP = 12
+        self.h4 = Hero(self, 4, screen)
+        self.h4.HP = 13
+        self.map.set_heroes(heroes)
+
+    def addHero(self, hero):
+        self.heroes.append(hero)
+
+    def update(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit()
+            #if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
+            self.map.update(event)
+        self.map.update()
+        self.inv.update()
+        for i in self.map.heroes:
+            i.update()
+
+
 if __name__ == '__main__':
     from settings import *
     pygame.init()
@@ -90,19 +123,21 @@ if __name__ == '__main__':
         fps_text = font.render(fps, 1, pygame.Color("coral"))
         return fps_text
 
-    target_sprite_group = pygame.sprite.Group()
-    mp = Map(target_sprite_group, screen)
-    Inventory(target_sprite_group, screen)
-    h1 = Hero(target_sprite_group, 1, screen)
-    h1.HP = 10
-    h2 = Hero(target_sprite_group, 2, screen)
-    h2.HP = 11
-    h3 = Hero(target_sprite_group, 3, screen)
-    h3.HP = 12
-    h4 = Hero(target_sprite_group, 4, screen)
-    h4.HP = 13
-    heroes = [h1, h2, h3, h4]
-    mp.set_heroes(heroes)
+
+    trg = BattleGroup(screen)
+    #target_sprite_group = pygame.sprite.Group()
+    #mp = Map(target_sprite_group, screen)
+    #Inventory(target_sprite_group, screen)
+    #h1 = Hero(target_sprite_group, 1, screen)
+    #h1.HP = 10
+    #h2 = Hero(target_sprite_group, 2, screen)
+    #h2.HP = 11
+    #h3 = Hero(target_sprite_group, 3, screen)
+    #h3.HP = 12
+    #h4 = Hero(target_sprite_group, 4, screen)
+    #h4.HP = 13
+    #heroes = [h1, h2, h3, h4]
+    #mp.set_heroes(heroes)
     #while True:
     #    target_sprite_group.update(pygame.event.get())
     #    screen.blit(update_fps(), (10,0))
@@ -110,13 +145,7 @@ if __name__ == '__main__':
     #    clock.tick()
     while True:
         screen.fill((0, 0, 0))
-        events = pygame.event.get()
-        for event in events:
-            if event.type == pygame.QUIT:
-                exit()
-            target_sprite_group.update(event)
-        if not events:
-            target_sprite_group.update()
+        trg.update()
         screen.blit(update_fps(), (5, 5))
         pygame.display.flip()
         clock.tick()

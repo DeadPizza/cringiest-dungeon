@@ -2,21 +2,29 @@
     {
         "name": "RED_SQUARE",
         "type": "default",
-        "texture": "hero.png"
+        "texture": "hero.png",
+        "icon": "chars/jester_icon.png",
+        "skills": [ "warrior.attack", "warrior.bleed", "warrior.bleed", "warrior.bleed" ]
     },
     {
-        "name": "RED_SQUARE",
+        "name": "FutaCOCK",
         "type": "default",
-        "texture": "hero.png"
+        "texture": "hero.png",
+        "icon": "chars/pog_icon.png",
+        "skills": [ "warrior.attack", "warrior.bleed", "warrior.attack", "warrior.bleed" ]
     },
     {
-        "name": "RED_SQUARE",
+        "name": "NIGGERS",
         "type": "default",
-        "texture": "hero.png"
+        "texture": "hero.png",
+        "icon": "chars/pog_icon.png",
+        "skills": [ "warrior.attack", "warrior.attack", "warrior.bleed", "warrior.bleed" ]
     },
     {
-        "name": "RED_SQUARE",
+        "name": "HALAL",
         "type": "default",
-        "texture": "hero.png"
+        "texture": "hero.png",
+        "icon": "chars/jester_icon.png",
+        "skills": [ "warrior.attack", "warrior.bleed", "warrior.bleed", "warrior.attack" ]
     }
 ]

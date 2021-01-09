@@ -1,0 +1,19 @@
+{
+    "warrior.attack": {
+        "title": "Обычная атака",
+        "icon": "skills/warrior_attack.png",
+        "damage": 15,
+        "effect": 0
+    },
+    "warrior.bleed": {
+        "title": "Разрез",
+        "icon": "skills/warrior_bleed.png",
+        "damage": 1,
+        "effect": 3,
+        "effect_list": [
+            {"damage": 10},
+            {"damage": 10},
+            {"damage": 10}
+        ]
+    }
+}

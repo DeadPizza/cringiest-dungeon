@@ -43,7 +43,7 @@ last_was = level_iter(-1)
 
 class Skill:
     def __init__(self, num, name):
-        f = open('D:/cringiest dungeon/resources/setups/skills_setup.json', encoding='UTF-8')
+        f = open('resources/setups/skills_setup.json', encoding='UTF-8')
         data = json.load(f)[name]
         self.num = num
         self.title = data['title']

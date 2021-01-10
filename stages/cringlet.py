@@ -1,5 +1,6 @@
 import pygame
 from stages.pg_utils import load_image, load_audio
+import json
 
 setGameStage = None
 def makeStageFunc(func):
@@ -64,7 +65,10 @@ class CringletController:
 
         if self.goToDungeon_rect.collidepoint(mpos):
             #print('start dungeon')
-            setGameStage(2)
+            choosen = [i.num for i in self.choose_list.selected]
+            if len(choosen) != 4:
+                return
+            setGameStage(2, choosen)
             return
 
     def renderUI(self):
@@ -79,10 +83,13 @@ class CringletController:
         self.screen.blit(self.background, (0, 0))
 
 class PyListItem:
-    def __init__(self, pos, num):
+    def __init__(self, pos, num, data):
         self.x, self.y = pos
         self.num = num
         self.tgl = False
+        self.hero_name = data['name']
+        self.hero_UI_font = pygame.font.SysFont('Arial', 15)
+        self.hero_icon = load_image(data['icon'])
         self.img = load_image('UI/cringlet_select_char.png')
         self.img2 = load_image('UI/cringlet_select_char_selected.png')
         self.image = self.img
@@ -102,11 +109,14 @@ class PyListItem:
         if cur_y > 720 or cur_y < 0:
             return
         screen.blit(self.image, (self.x, cur_y))
+        screen.blit(self.hero_icon, (self.x, cur_y))
+        textsurface = self.hero_UI_font.render(self.hero_name, False, (255, 255, 255))
+        screen.blit(textsurface, (self.x + 66, self.y + 5))
 
 class PygameList:
     def __init__(self, screen):
         self.screen = screen
-        self.li = [PyListItem((1040, 10 + 96 * i), i) for i in range(10)]
+        self.li = load_all_chars()
         self.selected = []
         self.dy = 0
 
@@ -143,3 +153,13 @@ class PygameList:
         for i in self.li:
             i.update(self.screen, self.dy)
         self.screen.blit(self.overlay, (1030, 0))
+
+
+def load_all_chars():
+    f = open('save/heroes.json', encoding='UTF-8') 
+    saved_data = json.load(f)
+    heroes = []
+    for j, i in enumerate(saved_data):
+        heroes.append(PyListItem((1040, 10 + 96 * j), j, i))
+    f.close()
+    return heroes

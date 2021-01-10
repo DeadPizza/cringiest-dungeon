@@ -5,7 +5,7 @@ import stages.dungeon as dungeon
 from stages.settings import *
 
 
-def setGameStage(stage):
+def setGameStage(stage, *args):
     global target
     global screen
     if stage == 0:
@@ -13,7 +13,7 @@ def setGameStage(stage):
     elif stage == 1:
         target = cringlet.CringletController(screen)
     elif stage == 2:
-        target = dungeon.DungeonController(screen, 0)
+        target = dungeon.DungeonController(screen, 0, args[0])
 
 menu.makeStageFunc(setGameStage)
 cringlet.makeStageFunc(setGameStage)

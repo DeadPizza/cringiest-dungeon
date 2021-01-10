@@ -183,11 +183,11 @@ class OnMapThing:
             print('потом добавлю')
 
 class DungeonController:
-    def __init__(self, screen, iteration):
+    def __init__(self, screen, iteration, heroes_indexes):
         self.screen = screen
         self.iteration = iteration
 
-        self.heroes = load_heroes((0, 1, 2, 3))
+        self.heroes = load_heroes(heroes_indexes)
         self.heroes_len = 4
         #self.enemies = [Enemy(1), Enemy(2), Enemy(3), Enemy(4)]
         self.hero_current = None

@@ -19,6 +19,12 @@ def load_image(name, colorkey=None):
             image = image.convert_alpha()
         return image
 
+def load_audio(name):
+    fullname = os.path.join('resources/audio', name)
+    if not os.path.isfile(fullname):
+            print(f"file '{fullname}' not found")
+            sys.exit()
+    return pygame.mixer.Sound(fullname)
 
 if __name__ == '__main__':
     pygame.init()

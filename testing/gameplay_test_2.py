@@ -1,7 +1,38 @@
-from test import load_image
+from test import load_image, load_audio
 import pygame
 import json
 import random
+
+last_was = 'niggers'
+
+def music_iter(iteration):
+    if iteration < 3:
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load('resources/audio/forest_theme.mp3')
+        pygame.mixer.music.play(-1)
+    elif 3 <= iteration < 6:
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load('resources/audio/mm_music.mp3')
+        pygame.mixer.music.play(-1)
+    else:
+        pygame.mixer.music.stop()
+        pygame.mixer.music.load('resources/audio/forest_theme.mp3')
+        pygame.mixer.music.play(-1)
+
+def level_iter(iteration):
+    global last_was
+    now = ''
+    if iteration < 3:
+        now = 'backs/map_RoyalForest.png'
+    elif 3 <= iteration < 6:
+        now = 'backs/map_AbandonedCastle.png'
+    else:
+        now = 'backs/testmap.png'
+
+    if now != last_was:
+        music_iter(iteration)
+
+    return now
 
 class Skill:
     def __init__(self, num, name):
@@ -21,7 +52,10 @@ class Skill:
         del data
 
     def work(self, target, toPerform):
+        sound = load_audio('skill_effect.mp3')
+        sound.play()
         target.HP -= self.damage
+        if target.HP < 0: target.HP = 0
         for i in range(self.effect):
             try:
                 toPerform[i].append((target, self.turn_effect[i]['damage']))
@@ -63,15 +97,18 @@ class Enemy:
         trg = random.choice(heroes)
 
         trg.HP -= sk.damage
+        if trg.HP < 0: trg.HP = 0
 
 class Inventory:
     def __init__(self, sprite):
         self.image = load_image(sprite)
 
 class BattleController:
-    def __init__(self, screen, pls):
+    def __init__(self, screen, controller):
         self.screen = screen
-        self.heroes = pls
+        self.controller = controller
+        self.heroes = controller.heroes
+        self.enemies_alive = 4
         self.enemies = [Enemy(1), Enemy(2), Enemy(3), Enemy(4)]
         self.player_target = None
         self.current_skill = None
@@ -95,8 +132,19 @@ class BattleController:
             self.queue_index = 0
             self.performEnemyAction()
             self.turn += 1
+            if len(self.effectsToPerform) == 0: return
             for target, damage in self.effectsToPerform.pop(0):
                 target.HP -= damage
+                if target.HP < 0: target.HP = 0
+        for c_enemy in self.enemies.copy():
+            if c_enemy.HP == 0:
+                for index in range(len(self.enemies)):
+                    if self.enemies[index] == c_enemy:
+                        del self.enemies[index]
+                        break
+                self.enemies_alive -= 1
+                if self.enemies_alive == 0:
+                    self.controller.destroyBattle()
 
     def performEnemyAction(self):
         for c_enemy in self.enemies:
@@ -110,16 +158,35 @@ class BattleController:
             x, y = self.current_skill.icon_rect.topleft
             pygame.draw.rect(self.screen, (255, 0, 0), pygame.Rect((x, y), (64, 64)), 5)
 
+class OnMapThing:
+    def __init__(self, x, type_):
+        self.type_ = type_
+        self.x = x
+        if self.type_ == 1:
+            self.img = None
+        elif self.type_ == 2:
+            self.img = load_image('enemy.png')
+    
+    def trigger(self, controller):
+        if self.type_ == 1:
+            sound = load_audio('battle_start.mp3')
+            sound.play()
+            controller.makeBattle()
+        else:
+            print('потом добавлю')
+
 class DungeonController:
-    def __init__(self, screen):
+    def __init__(self, screen, iteration):
         self.screen = screen
+        self.iteration = iteration
 
         self.heroes = load_heroes((0, 1, 2, 3))
+        self.heroes_len = 4
         #self.enemies = [Enemy(1), Enemy(2), Enemy(3), Enemy(4)]
         self.hero_current = None
         self.hero_UI_font = pygame.font.SysFont('Arial', 20)
 
-        self.map_image = load_image('backs/testmap.png')
+        self.map_image = load_image(level_iter(iteration))
         self.map_image_rect = self.map_image.get_rect()
         self.map_dx = 0
         self.map_moving = False
@@ -128,7 +195,56 @@ class DungeonController:
 
         self.BATTLE = False
 
+        self.FADEOUT_FLAG = False
+        self.FADEIN_FLAG = True
+        self.ALPHA_FADE = 255
+        self.alphaSurf = pygame.Surface((1280, 720))
+        self.alphaSurf.fill((0, 0, 0))
+        self.alphaSurf.set_alpha(self.ALPHA_FADE)
+        self.otherObjects = []
+        self.makeContent()
+
+    def makeContent(self):
+        for i in range(5):
+            res = random.choice((0, 0, 1, 2))
+            if i * res == 0: continue
+            self.otherObjects.append(OnMapThing(-215 + 430 * (i + 1), res))
+        print(self.otherObjects)
+
+    def fadeout(self):
+        self.renderUI()
+        self.renderHeroes()
+        self.ALPHA_FADE += 3
+        if self.ALPHA_FADE >= 255:
+            self.FADEOUT_FLAG = False
+            self.__init__(self.screen, self.iteration + 1)
+        self.alphaSurf.set_alpha(self.ALPHA_FADE)
+        self.screen.blit(self.alphaSurf, (0, 0))
+
+    def fadein(self):
+        self.renderUI()
+        self.renderHeroes()
+        self.ALPHA_FADE -= 3
+        if self.ALPHA_FADE <=3:
+            self.FADEIN_FLAG = False
+        self.alphaSurf.set_alpha(self.ALPHA_FADE)
+        self.screen.blit(self.alphaSurf, (0, 0))
+
     def update(self):
+        if self.FADEOUT_FLAG:
+            self.fadeout()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    exit()
+            return
+        
+        if self.FADEIN_FLAG:
+            self.fadein()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    exit()
+            return
+            
         mpos = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -137,16 +253,24 @@ class DungeonController:
                 self.onClickDown(mpos)
             elif event.type == pygame.MOUSEBUTTONUP:
                 self.onClickUp()
-            elif event.type == pygame.KEYDOWN:
-                self.makeBattle()
+            #elif event.type == pygame.KEYDOWN:
+            #    self.makeBattle()
 
         if self.map_moving:
             self.map_dx -= 1
-            self.map_dx -= 3 * (1 - 2 * (mpos[0] < 640))
+            self.map_dx -= 4 * (1 - 2 * (mpos[0] < 640))
             if self.map_dx > 0:
                 self.map_dx = 0
             elif self.map_dx < -1650:
                 self.map_dx = -1650
+                self.ALPHA_FADE = 0
+                self.FADEOUT_FLAG = True
+                return
+
+            for obj in self.otherObjects:
+                if obj.x - 2 <= -self.map_dx + 400 <= obj.x + 2:
+                    obj.trigger(self)
+                #self.__init__(self.screen, self.iteration + 1)
 
 
         self.renderUI()
@@ -158,13 +282,23 @@ class DungeonController:
     def makeBattle(self):
         if self.BATTLE:
             return
-        self.battle_cont = BattleController(self.screen, self.heroes)
+        self.battle_cont = BattleController(self.screen, self)
         self.BATTLE = True
         self.map_moving = False
         self.hero_current = self.battle_cont.getCurrentHero()
 
+    def destroyBattle(self):
+        if not self.BATTLE:
+            return
+        del self.battle_cont
+        self.BATTLE = False
+        self.hero_current = None
+
     def renderUI(self):
         self.screen.blit(self.map_image, (self.map_dx, 0))
+        for obj in self.otherObjects:
+            if obj.type_ == 1: continue
+            screen.blit(obj.img, (obj.x + self.map_dx, 100))
         self.screen.blit(self.inventory.image, (0, 420))
 
     def renderHeroes(self):
@@ -196,7 +330,10 @@ class DungeonController:
             self.battle_cont.player_target = self.battle_cont.enemies[target - 1]
             #print(f'{target} ща сдохнет')
             self.battle_cont.performAction()
-            self.hero_current = self.battle_cont.getCurrentHero()
+            try:
+                self.hero_current = self.battle_cont.getCurrentHero()
+            except AttributeError:
+                self.hero_current = None
             return
 
         if self.hero_current is not None:
@@ -223,13 +360,13 @@ class DungeonController:
 
         
     def checkHeroes(self, mpos):
-        for index in range(4):
+        for index in range(self.heroes_len):
             if self.heroes[index].image_rect.collidepoint(mpos):
                 return index + 1
         return 0
 
     def checkEnemies(self, mpos):
-        for index in range(4):
+        for index in range(self.battle_cont.enemies_alive):
             if self.battle_cont.enemies[index].image_rect.collidepoint(mpos):
                 return index + 1
         return 0
@@ -257,7 +394,7 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     size = WIDTH, HEIGHT
     screen = pygame.display.set_mode(size)
-    trg = DungeonController(screen)
+    trg = DungeonController(screen, 1)
 
     font = pygame.font.SysFont("Arial", 18)
     def update_fps():
@@ -266,8 +403,8 @@ if __name__ == '__main__':
         return fps_text
     
     while True:
-        screen.fill((0, 0, 0))
+        #screen.fill((0, 0, 0))
         trg.update()
         screen.blit(update_fps(), (5, 5))
         pygame.display.flip()
-        clock.tick()
+        clock.tick(FPS)

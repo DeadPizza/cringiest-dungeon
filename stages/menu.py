@@ -11,7 +11,7 @@ class MenuController:
         self.screen = screen
 
         self.background = load_image('backs/bg_main_menu.png')
-        pygame.mixer.music.load('resources/audio/mm_music.mp3')
+        pygame.mixer.music.load('resources/audio/mm_music.ogg')
         pygame.mixer.music.play(-1)
 
         self.start_img_idle = load_image('button_main_menu_start_idle.png')

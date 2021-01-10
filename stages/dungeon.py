@@ -11,15 +11,15 @@ def makeStageFunc(func):
 def music_iter(iteration):
     if iteration < 3:
         pygame.mixer.music.stop()
-        pygame.mixer.music.load('resources/audio/forest_theme.mp3')
+        pygame.mixer.music.load('resources/audio/forest_theme.ogg')
         pygame.mixer.music.play(-1)
     elif 3 <= iteration < 6:
         pygame.mixer.music.stop()
-        pygame.mixer.music.load('resources/audio/mm_music.mp3')
+        pygame.mixer.music.load('resources/audio/mm_music.ogg')
         pygame.mixer.music.play(-1)
     else:
         pygame.mixer.music.stop()
-        pygame.mixer.music.load('resources/audio/forest_theme.mp3')
+        pygame.mixer.music.load('resources/audio/forest_theme.ogg')
         pygame.mixer.music.play(-1)
 
 last_was = 'niggers'
@@ -59,7 +59,7 @@ class Skill:
         del data
 
     def work(self, target, toPerform):
-        sound = load_audio('skill_effect.mp3')
+        sound = load_audio('skill_effect.ogg')
         sound.play()
         target.HP -= self.damage
         if target.HP < 0: target.HP = 0
@@ -176,7 +176,7 @@ class OnMapThing:
     
     def trigger(self, controller):
         if self.type_ == 1:
-            sound = load_audio('battle_start.mp3')
+            sound = load_audio('battle_start.ogg')
             sound.play()
             controller.makeBattle()
         else:
@@ -186,7 +186,7 @@ class DungeonController:
     def __init__(self, screen, iteration, heroes_indexes):
         self.screen = screen
         self.iteration = iteration
-
+        self.heroes_indexes = heroes_indexes
         self.heroes = load_heroes(heroes_indexes)
         self.heroes_len = 4
         #self.enemies = [Enemy(1), Enemy(2), Enemy(3), Enemy(4)]
@@ -230,7 +230,7 @@ class DungeonController:
         self.ALPHA_FADE += 3
         if self.ALPHA_FADE >= 255:
             self.FADEOUT_FLAG = False
-            self.__init__(self.screen, self.iteration + 1)
+            self.__init__(self.screen, self.iteration + 1, self.heroes_indexes)
         self.alphaSurf.set_alpha(self.ALPHA_FADE)
         self.screen.blit(self.alphaSurf, (0, 0))
 

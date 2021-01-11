@@ -111,7 +111,7 @@ class PyListItem:
         screen.blit(self.image, (self.x, cur_y))
         screen.blit(self.hero_icon, (self.x, cur_y))
         textsurface = self.hero_UI_font.render(self.hero_name, False, (255, 255, 255))
-        screen.blit(textsurface, (self.x + 66, self.y + 5))
+        screen.blit(textsurface, (self.x + 66, cur_y + 5))
 
 class PygameList:
     def __init__(self, screen):

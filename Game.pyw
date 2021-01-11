@@ -23,17 +23,10 @@ pygame.init()
 clock = pygame.time.Clock()
 size = WIDTH, HEIGHT
 screen = pygame.display.set_mode(size)
+
 target = None
-
-font = pygame.font.SysFont("Arial", 18)
-def update_fps():
-    fps = str(int(clock.get_fps()))
-    fps_text = font.render(fps, 1, pygame.Color("coral"))
-    return fps_text
-
 setGameStage(0)
 while True:
     target.update()
-    screen.blit(update_fps(), (5, 5))
     pygame.display.flip()
     clock.tick(FPS)

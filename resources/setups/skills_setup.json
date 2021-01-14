@@ -18,5 +18,37 @@
             {"damage": 10},
             {"damage": 10}
         ]
+    },
+    "crusader.attack": {
+        "title": "Обычная атака (крестоносец)",
+        "icon": "skills/warrior_attack.png",
+        "onWork": [
+            {"target": "selected", "damage": 3}
+        ],
+        "effect": 0
+    },
+    "crusader.heal": {
+        "title": "Хил",
+        "icon": "skills/warrior_attack.png",
+        "onWork": [
+            {"target": "selected", "damage": -1}
+        ],
+        "effect": 0
+    },
+    "crusader.mass_attack": {
+        "title": "Массовая Атака",
+        "icon": "skills/warrior_attack.png",
+        "onWork": [
+            {"target": "selected", "damage": 2}
+        ],
+        "effect": 0
+    },
+    "crusader.random_shot": {
+        "title": "Атака в рандома",
+        "icon": "skills/warrior_attack.png",
+        "onWork": [
+            {"target": "selected", "damage": 1}
+        ],
+        "effect": 0
     }
 }

@@ -1,0 +1,17 @@
+{
+    "default": {
+        "texture": "hero.png",
+        "icon": "chars/pog_icon.png",
+        "skills": [ "warrior.attack", "warrior.bleed", "warrior.attack", "warrior.bleed" ]
+    },
+    "crusader": {
+        "texture": "hero.png",
+        "icon": "chars/crusader_icon.jpg",
+        "skills": [ "crusader.attack", "crusader.heal", "crusader.mass_attack", "crusader.random_shot" ]
+    },
+    "sus": {
+        "texture": "hero.png",
+        "icon": "chars/jerma_icon.png",
+        "skills": [ "warrior.attack", "warrior.bleed", "warrior.attack", "warrior.bleed" ]
+    }
+}

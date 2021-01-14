@@ -471,8 +471,15 @@ class DungeonController:
 def load_heroes(indexes):
     f = open('save/heroes.json', encoding='UTF-8') 
     saved_data = json.load(f)
+    f2 = open('resources/setups/heroes_setup.json', encoding='UTF-8') 
+    setups = json.load(f2)
     heroes = []
     for j, i in enumerate(indexes):
-        heroes.append(Hero(j + 1, saved_data[i]))
+        res = {}
+        for key, val in saved_data[i].items():
+            res[key] = val
+        for key, val in setups[saved_data[i]['type']].items():
+            res[key] = val
+        heroes.append(Hero(j + 1, res))
     f.close()
     return heroes

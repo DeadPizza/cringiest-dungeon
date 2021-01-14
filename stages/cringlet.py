@@ -155,11 +155,29 @@ class PygameList:
         self.screen.blit(self.overlay, (1030, 0))
 
 
-def load_all_chars():
+def load_all_chars_obsolette():
     f = open('save/heroes.json', encoding='UTF-8') 
     saved_data = json.load(f)
     heroes = []
     for j, i in enumerate(saved_data):
         heroes.append(PyListItem((1040, 10 + 96 * j), j, i))
     f.close()
+    return heroes
+
+
+def load_all_chars():
+    f = open('save/heroes.json', encoding='UTF-8') 
+    saved_data = json.load(f)
+    f2 = open('resources/setups/heroes_setup.json', encoding='UTF-8') 
+    setups = json.load(f2)
+    heroes = []
+    for num, dict_ in enumerate(saved_data):
+        res = {}
+        for key, val in dict_.items():
+            res[key] = val
+        for key, val in setups[dict_['type']].items():
+            res[key] = val
+        heroes.append(PyListItem((1040, 10 + 96 * num), num, res))
+    f.close()
+    f2.close()
     return heroes

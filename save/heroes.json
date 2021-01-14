@@ -1,30 +1,18 @@
 [
     {
-        "name": "RED_SQUARE",
-        "type": "default",
-        "texture": "hero.png",
-        "icon": "chars/jester_icon.png",
-        "skills": [ "warrior.attack", "warrior.bleed", "warrior.bleed", "warrior.bleed" ]
+        "name": "POGGERS",
+        "type": "default"
     },
     {
-        "name": "FutaCOCK",
-        "type": "default",
-        "texture": "hero.png",
-        "icon": "chars/pog_icon.png",
-        "skills": [ "warrior.attack", "warrior.bleed", "warrior.attack", "warrior.bleed" ]
+        "name": "Ni-",
+        "type": "crusader"
     },
     {
-        "name": "NIGGERS",
-        "type": "default",
-        "texture": "hero.png",
-        "icon": "chars/pog_icon.png",
-        "skills": [ "warrior.attack", "warrior.attack", "warrior.bleed", "warrior.bleed" ]
+        "name": "Imposter",
+        "type": "sus"
     },
     {
         "name": "HALAL",
-        "type": "default",
-        "texture": "hero.png",
-        "icon": "chars/jester_icon.png",
-        "skills": [ "warrior.attack", "warrior.bleed", "warrior.bleed", "warrior.attack" ]
+        "type": "default"
     }
 ]
